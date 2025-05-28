@@ -42,3 +42,26 @@ void cargarBibliotecas(string nombreArchivo,vector<Biblioteca*>& bibliotecas)
 
    
 }
+
+void cargarPrestamos(string nombreArchivo, vector<Prestamo*>& prestamos){
+    ifstream archivo(nombreArchivo.c_str());
+    string linea;
+    while (getline(archivo, linea)){
+        istringstream ss(linea);
+        vector<string> infoPrestamo;
+        string palabra;
+        while (ss >> palabra){
+            infoPrestamo.push_back(palabra);
+        }
+        if (infoPrestamo.size() >= 4){
+            Prestamo *prestamoCreado = new Prestamo(
+                infoPrestamo[0],
+                infoPrestamo[1],
+                infoPrestamo[2],
+                infoPrestamo[3]);
+            prestamos.push_back(prestamoCreado);
+        }
+    }
+    archivo.close();
+}
+
