@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include "Biblioteca.h"
+#include "Prestamo.h"
 using namespace std;
 
 void cargarBibliotecas(string nombreArchivo,vector<Biblioteca*>& bibliotecas)
