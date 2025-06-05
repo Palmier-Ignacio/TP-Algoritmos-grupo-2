@@ -1,19 +1,20 @@
 #include <iostream>
 #include <fstream>
-#include "auxiliares.cpp"
-#include "biblioteca.cpp"
 #include "biblioteca.h"
 #include "prestamo.h"
-#include "auxiliares.cpp"
+#include "auxiliares.h"
+#include "tablaHash.h"
+#include <vector>
+#include <string>
+
 
 using namespace std;
 
 int main()
 {
      // preguntar al profe sobre el formato del archivo, si habia una palabra de mas..
-    vector<Biblioteca*> bibliotecas= {};
-    cargarBibliotecas("bibliotecas.txt", bibliotecas);
-
+   
+/* 
     cout << "Bibliotecas cargadas: " << endl;
     for (int i = 0; i < bibliotecas.size(); i++)
     {
@@ -26,7 +27,7 @@ int main()
         delete biblio; 
     }
 
-   bibliotecas.clear();
+   bibliotecas.clear(); */
 
    vector<Prestamo*> prestamos = {};
    cargarPrestamos("prestamos.txt", prestamos);
