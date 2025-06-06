@@ -5,10 +5,11 @@
 #include "Biblioteca.h"
 #include "Prestamo.h"
 #include "tablaHash.h"
+#include "arbol.h"
 
 using namespace std;
 
-int cargarBibliotecas(string nombreArchivo,vector<Biblioteca*>& biblioteca)
+int cargarBibliotecas(string nombreArchivo,Arbol& arbol)
 {
     ifstream archivo(nombreArchivo.c_str());
     string linea;
@@ -38,7 +39,7 @@ int cargarBibliotecas(string nombreArchivo,vector<Biblioteca*>& biblioteca)
                 stoi(infoBiblioteca[5]),
                 stoi(infoBiblioteca[6]));
 
-            biblioteca.push_back(bibliotecaCreada);
+            arbol.insertar(bibliotecaCreada);
         }
        
     }
