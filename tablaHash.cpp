@@ -21,7 +21,7 @@ TablaHash::~TablaHash()
 
 int TablaHash::getTamanio() { return tamanio; }
  
-int TablaHash::buscarIndiceParaInsertar(const string &clave) const
+int TablaHash::buscarIndiceParaInsertar(const string &clave) 
 {
     int indice = funcionHash(clave);
     int intentos = 0;
@@ -39,7 +39,7 @@ int TablaHash::buscarIndiceParaInsertar(const string &clave) const
     return -1; // No se encontró un lugar válido
 }
 
-int TablaHash::buscarIndiceDeClave(const string &clave) const
+int TablaHash::buscarIndiceDeClave(const string &clave) 
 {
     int indice = funcionHash(clave);
     int intentos = 0;
