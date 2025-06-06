@@ -6,6 +6,7 @@
 #include "biblioteca.h"
 #include "auxiliares.h"
 #include "tablaHash.h"
+#include "arbol.h"
 
 
 using namespace std;
@@ -15,11 +16,14 @@ void gestorBibliotecas()
     char operacion;
     bool aux = true;
 
-    vector<Biblioteca*> biblioteca = {};
-    int cantidadBibliotecas = cargarBibliotecas("bibliotecas.txt", biblioteca);
+    Arbol arbolBibliotecas;
+    int cantidadBibliotecas = cargarBibliotecas("bibliotecas.txt", arbolBibliotecas);
     int tamanioTabla = cantidadBibliotecas/0.8;//fijarnos esto
     TablaHash tablaBiblioteca =TablaHash(tamanioTabla);
     // recorrer arbol y cargar tabla
+
+    
+    arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
 
     do
     {
@@ -79,4 +83,7 @@ void gestorBibliotecas()
             std::cout << "Operación no válida." << std::endl;
         }
     } while (aux);
+
+    arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());
+
 }
