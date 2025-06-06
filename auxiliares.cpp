@@ -4,7 +4,7 @@
 #include <sstream>
 #include "Biblioteca.h"
 #include "Prestamo.h"
-#include "tablaHash.h"
+//#include "tablaHash.h"
 #include "arbol.h"
 
 using namespace std;
