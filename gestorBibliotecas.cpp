@@ -86,7 +86,7 @@ void gestorBibliotecas()
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             // falta borrar en la tabla
             string codigoBibliotecaABorrar;
-            cout << "Por favor, ingrese el nombre del producto que desea eliminar: ";
+            cout << "Por favor, ingrese el nombre de la biblioteca que desea eliminar: ";
             cin >> codigoBibliotecaABorrar;
             arbolBibliotecas.borrar(codigoBibliotecaABorrar);
         }
@@ -105,10 +105,10 @@ void gestorBibliotecas()
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             break;
         case 'g':
-            std::cout << "Cargar productos al chango" << operacion << std::endl;
+            std::cout << "La opción que usted eligió es " << operacion << std::endl;
             break;
         case 'h':
-            std::cout << "Saliendo del menu" << std::endl;
+            std::cout << "La opción que usted eligió es " << operacion << std::endl;
 
             break;
         case 'i':
