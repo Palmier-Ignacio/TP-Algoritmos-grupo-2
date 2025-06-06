@@ -21,6 +21,8 @@ Nodo *Arbol::getRaiz()
 void Arbol::insertar(Biblioteca *nuevaBiblioteca)
 {
     raiz = insertarRecursivo(raiz, nuevaBiblioteca);
+    cout << "Se anadio con exito la biblioteca";
+    nuevaBiblioteca->mostrar();
 }
 
 Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
@@ -31,11 +33,11 @@ Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
     }
     else if (biblio->getCodigo() < nodo->getBiblioteca()->getCodigo())
     {
-        insertarRecursivo(nodo->getHijoIzquierda(), biblio);
+        nodo->setHijoIzquierda(insertarRecursivo(nodo->getHijoIzquierda(), biblio));
     }
     else
     {
-        insertarRecursivo(nodo->getHijoDerecha(), biblio);
+        nodo->setHijoIzquierda(insertarRecursivo(nodo->getHijoDerecha(), biblio));
     }
     return nodo;
 }
@@ -113,11 +115,121 @@ Nodo *Arbol::encontrarPadre(string codigoBiblioteca)
     return padre;
 }
 
-void Arbol::eliminarCaso1(Nodo *nodo, string codigoBiblioteca) {
-    Nodo *aux = nodo;
+void Arbol::eliminarCaso1(Nodo *padreNodo, string codigoBiblioteca)
+{
+    Nodo *aux;
+    if (padreNodo->getHijoDerecha() and padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    {
+        aux = padreNodo->getHijoDerecha();
+        padreNodo->setHijoDerecha(nullptr);
+    }
+    else
+    {
+        aux = padreNodo->getHijoIzquierda();
+        padreNodo->setHijoIzquierda(nullptr);
+    }
+    delete aux;
 };
-void Arbol::eliminarCaso2(Nodo *nodo, string codigoBiblioteca) {};
-void Arbol::eliminarCaso3(Nodo *nodo, string codigoBiblioteca) {};
+
+void Arbol::eliminarCaso2(Nodo *padreNodo, string codigoBiblioteca)
+{
+    Nodo *aux;
+    bool esDerecha;
+
+    if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    {
+        aux = padreNodo->getHijoDerecha();
+        esDerecha = true;
+    }
+    else
+    {
+        aux = padreNodo->getHijoIzquierda();
+        esDerecha = false;
+    }
+
+    Nodo *hijoUnico = aux->getHijoIzquierda() ? aux->getHijoIzquierda() : aux->getHijoDerecha();
+
+    if (esDerecha)
+        padreNodo->setHijoDerecha(hijoUnico);
+    else
+        padreNodo->setHijoIzquierda(hijoUnico);
+
+    delete aux;
+};
+
+Nodo *Arbol::padreMayorDeSubarbol(Nodo *nodo)
+{
+    Nodo *padre = nodo;
+    Nodo *actual = nodo;
+
+    if (!actual)
+    {
+        while (actual->getHijoDerecha())
+        {
+            padre = actual;
+            actual = actual->getHijoDerecha();
+        }
+    }
+
+    return padre;
+}
+
+void Arbol::eliminarCaso3(Nodo *padreNodo, string codigoBiblioteca)
+{
+    Nodo *aux;
+
+    // Obtener puntero al nodo que contiene el código a eliminar
+    if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    {
+        aux = padreNodo->getHijoDerecha();
+    }
+    else
+    {
+        aux = padreNodo->getHijoIzquierda();
+    }
+
+    // Paso 1: Obtener padre del mayor de los menores
+    Nodo *padreMayorMenores = padreMayorDeSubarbol(aux->getHijoIzquierda());
+
+    Nodo *mayorMenor;
+
+    // Caso especial: el hijo izquierdo de aux es el mayor de los menores
+    if (padreMayorMenores == aux)
+    {
+        mayorMenor = aux->getHijoIzquierda();
+    }
+    else
+    {
+        mayorMenor = padreMayorMenores->getHijoDerecha();
+    }
+
+    // Paso 2: reconectar el padre del nodo que contiene x con el nuevo nodo
+    if (padreNodo->getHijoDerecha() == aux)
+    {
+        padreNodo->setHijoDerecha(mayorMenor);
+    }
+    else
+    {
+        padreNodo->setHijoIzquierda(mayorMenor);
+    }
+
+    // Paso 3: reconectar los hijos del nodo original (aux) al nuevo nodo
+    mayorMenor->setHijoIzquierda(aux->getHijoIzquierda());
+    mayorMenor->setHijoDerecha(aux->getHijoDerecha());
+
+    // Paso 4: eliminar el nodo mayor de los menores desde su antigua posición
+    if (mayorMenor->getHijoIzquierda() == nullptr && mayorMenor->getHijoDerecha() == nullptr)
+    {
+        eliminarCaso1(padreMayorMenores, mayorMenor->getBiblioteca()->getCodigo());
+    }
+    else
+    {
+        eliminarCaso2(padreMayorMenores, mayorMenor->getBiblioteca()->getCodigo());
+    }
+
+    // Paso 5: eliminar el nodo original
+    delete aux;
+};
 
 void Arbol::borrar(string codigoBiblioteca)
 {
@@ -145,6 +257,29 @@ void Arbol::borrar(string codigoBiblioteca)
         else
         {
             eliminarCaso3(padreNodo, codigoBiblioteca);
+        }
+    }
+}
+
+void Arbol::buscar(Nodo *nodo, string codigoBiblioteca)
+{
+    if (nodo != NULL)
+    {
+        if (nodo->getBiblioteca()->getCodigo() == codigoBiblioteca)
+        {
+            nodo->getBiblioteca()->mostrar();
+        }
+        else if (codigoBiblioteca > nodo->getBiblioteca()->getCodigo())
+        {
+            buscar(nodo->getHijoDerecha(), codigoBiblioteca);
+        }
+        else if (codigoBiblioteca < nodo->getBiblioteca()->getCodigo())
+        {
+            buscar(nodo->getHijoIzquierda(), codigoBiblioteca);
+        }
+        else
+        {
+            cout << "No se encontro la biblioteca";
         }
     }
 }
