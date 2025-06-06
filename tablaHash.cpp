@@ -20,35 +20,46 @@ TablaHash::~TablaHash()
 }
 
 int TablaHash::getTamanio() { return tamanio; }
-/* 
-int TablaHash::buscarIndiceDisponible(const string &clave, bool paraInsertar) const
+ 
+int TablaHash::buscarIndiceParaInsertar(const string &clave) const
 {
     int indice = funcionHash(clave);
-    int original = indice;
     int intentos = 0;
 
     while (intentos < tamanio)
     {
         Estado estado = tabla[indice].getEstado();
 
-        if (paraInsertar)
-        {
-            if (estado != EN_USO || tabla[indice].getValor() == clave)
-                return indice;
-        }
-        else
-        {
-            if (estado == VACIO)
-                return -1; // No existe
-            if (estado == EN_USO && tabla[indice].getValor() == clave)
-                return indice;
-        }
+        if (estado != EN_USO || tabla[indice].getValor() == clave)
+            return indice;
 
         indice = (indice + 1) % tamanio;
         intentos++;
     }
-    return -1;
-} */
+    return -1; // No se encontró un lugar válido
+}
+
+int TablaHash::buscarIndiceDeClave(const string &clave) const
+{
+    int indice = funcionHash(clave);
+    int intentos = 0;
+
+    while (intentos < tamanio)
+    {
+        Estado estado = tabla[indice].getEstado();
+
+        if (estado == VACIO)
+            return -1; // No está la clave, y no va a aparecer más adelante
+
+        if (estado == EN_USO && tabla[indice].getValor() == clave)
+            return indice;
+
+        indice = (indice + 1) % tamanio;
+        intentos++;
+    }
+    return -1; // No se encontró la clave
+}
+
 
 void TablaHash::insertar(string codigoBiblioteca)
 {

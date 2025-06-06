@@ -20,6 +20,8 @@ public:
     int getTamanio();
     void buscarBiblioteca(string valorBiblio);
     void mostrarBibliotecas();
+    int TablaHash::buscarIndiceParaInsertar(const string &clave);
+    int TablaHash::buscarIndiceDeClave(const string &clave);
 
 };
 
