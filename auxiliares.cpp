@@ -4,15 +4,18 @@
 #include <sstream>
 #include "Biblioteca.h"
 #include "Prestamo.h"
+#include "arbol.h"
 using namespace std;
 
-void cargarBibliotecas(string nombreArchivo,vector<Biblioteca*>& bibliotecas)
+int cargarBibliotecas(string nombreArchivo,Arbol& arbol)
 {
     ifstream archivo(nombreArchivo.c_str());
     string linea;
+    int contadorBibliotecas=0;
 
     while (getline(archivo, linea))
     {
+        contadorBibliotecas++;
         istringstream ss(linea);
         vector<string> infoBiblioteca;
         string palabra;
@@ -28,21 +31,23 @@ void cargarBibliotecas(string nombreArchivo,vector<Biblioteca*>& bibliotecas)
         {
             Biblioteca *bibliotecaCreada = new Biblioteca(
                 infoBiblioteca[0],
-                infoBiblioteca[1],
-                infoBiblioteca[2],
-                stof(infoBiblioteca[3]),
+                infoBiblioteca[1]+ " " +infoBiblioteca[2],
+                infoBiblioteca[3],
                 stoi(infoBiblioteca[4]),
-                stoi(infoBiblioteca[5]));
+                stoi(infoBiblioteca[5]),
+                stoi(infoBiblioteca[6]));
 
-            bibliotecas.push_back(bibliotecaCreada);
+            arbol.insertar(bibliotecaCreada);
         }
        
     }
 
     archivo.close();
 
+    return contadorBibliotecas;
    
 }
+
 
 void cargarPrestamos(string nombreArchivo, vector<Prestamo*>& prestamos){
     ifstream archivo(nombreArchivo.c_str());
