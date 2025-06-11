@@ -1,19 +1,29 @@
-#ifndef NODO_H_INCLUDED
-#define NODO_H_INCLUDED
+#ifndef NODO_H
+#define NODO_H
 
+#include <iostream>
 #include "biblioteca.h"
+using namespace std;
 
-class Nodo
-{
+class Nodo {
 private:
-    Biblioteca* biblioteca;
-    Nodo* siguiente;
+    Biblioteca *biblioteca;
+    Nodo *hijoIzquierda;
+    Nodo *hijoDerecha;
 
 public:
     Nodo(Biblioteca* biblioteca);
-    Nodo* getSiguiente() const { return siguiente; }
-    void setSiguiente(Nodo* sig) { siguiente = sig; }
-    Biblioteca* getBiblioteca() const { return biblioteca; }
+
+    Biblioteca* getBiblioteca();
+
+    Nodo* getHijoIzquierda();
+
+    Nodo* getHijoDerecha() ;
+
+    void setHijoIzquierda(Nodo* nodo);
+
+    void setHijoDerecha(Nodo* nodo);
 };
+
 
 #endif
