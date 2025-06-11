@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "nodo.h"
+#include "tablaHash.h"
 #include <stack>
 
 class Arbol
@@ -30,6 +31,8 @@ public:
     void liberar(Nodo *nodo);
 
     void inorden(Nodo *raiz);
+
+    void recorreEInsertaEnTabla(Nodo *raiz, TablaHash tablaH);
 
     Nodo *encontrarPadre(string codigoBiblioteca);
 

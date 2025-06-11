@@ -1,7 +1,9 @@
 #include "tablahash.h"
 #include "celda.h"
 #include "biblioteca.h"
+#include <iostream>
 #include <string>
+using namespace std;
 TablaHash::TablaHash(int tamanio)
 {
     this->tamanio = tamanio;
@@ -63,71 +65,39 @@ int TablaHash::buscarIndiceDeClave(const string &clave)
 
 void TablaHash::insertar(string codigoBiblioteca)
 {
-    int clave = funcionHash(codigoBiblioteca);
+    int indice = buscarIndiceParaInsertar(codigoBiblioteca);
 
-    int cuantasVueltasDio = 0;
-    // dsps calcular
-    // ver biblio repetida
-
-    while (tabla[clave].getEstado() == EN_USO && cuantasVueltasDio < 3)
+    if (indice != -1)
     {
-        if (clave > tamanio - 1)
-        {
-            clave = clave - tamanio - 1;
-            cuantasVueltasDio++;
-        }
-        else
-        {
-            clave += clave;
-        }
-    }
-
-    if (tabla[clave].getEstado() != EN_USO)
-    {
-        tabla[clave].cambiarEstado(EN_USO);
-        tabla[clave].setValor(codigoBiblioteca);
+        tabla[indice].setValor(codigoBiblioteca);
+        tabla[indice].cambiarEstado(EN_USO);
     }
     else
     {
-        cout << "No se pudo insertar el codigo de la biblioteca";
+        cout << "No se pudo insertar el código de la biblioteca: tabla llena o sin espacio válido.\n";
     }
-};
+}
+
 
 void TablaHash::buscarBiblioteca(string codigoBiblioteca)
 {
-    int clave = funcionHash(codigoBiblioteca);
-    int cuantasVueltasDio = 0;
-    int puntero = 0;
-    if (tabla[clave].getValor() == codigoBiblioteca)
+    int indice = buscarIndiceDeClave(codigoBiblioteca);
+
+    if (indice != -1)
     {
-        cout << tabla[clave].getValor();
-    }
-    else if (tabla[clave].getEstado() == VACIO)
-    {
-        cout << "No existe la biblioteca";
+        cout << "Biblioteca encontrada: " << tabla[indice].getValor() << endl;
     }
     else
     {
-        clave += clave;
-        while (tabla[clave].getValor() != codigoBiblioteca && cuantasVueltasDio < 3)
-        { // hacer método de hash para casos especiales
-            if (clave > tamanio - 1)
-            {
-                clave = clave - tamanio - 1;
-                cuantasVueltasDio++;
-            }
-            else
-            {
-                clave += clave;
-            }
-        };
-        if (cuantasVueltasDio == 2)
-        {
-            cout << "La biblioteca fue borrada";
-        }
-        else
-        {
-            cout << tabla[clave].getValor();
-        };
-    };
+        cout << "La biblioteca no existe o fue borrada.\n";
+    }
+}
+
+void TablaHash::mostrarBibliotecas(){
+    cout << "Valores en Tabla: ";
+    for(int i = 0; i<tamanio;i++){
+        cout << tabla[i].getValor() <<", ";
+    }
+    cout << "] ";
 };
+

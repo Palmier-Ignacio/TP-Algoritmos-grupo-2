@@ -5,7 +5,7 @@
 #include <string>
 #include "biblioteca.h"
 #include "auxiliares.h"
-// #include "tablaHash.h"
+#include "tablaHash.h"
 #include "arbol.h"
 
 using namespace std;
@@ -18,10 +18,10 @@ void gestorBibliotecas()
     Arbol arbolBibliotecas;
     int cantidadBibliotecas = cargarBibliotecas("bibliotecas.txt", arbolBibliotecas);
     int tamanioTabla = cantidadBibliotecas / 0.8; // fijarnos esto
-    // TablaHash tablaBiblioteca = TablaHash(tamanioTabla);
-    //  falta recorrer arbol y cargar tabla
+    TablaHash tablaBiblioteca = TablaHash(tamanioTabla);
 
     arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
+    /* arbolBibliotecas.recorreEInsertaEnTabla(arbolBibliotecas.getRaiz(),tablaBiblioteca); */
 
     do
     {
@@ -35,7 +35,8 @@ void gestorBibliotecas()
              << "F) Calcular el total de prestamos de biblioteca   " << std::endl
              << "G) Detectar bibliotecas con alta carga  " << std::endl
              << "H) Buscar todos los prestamos de usuario por ISBN " << std::endl
-             << "I) Salir del menu " << std::endl
+             << "I) Mostrar bibliotecas en TablaHash " << std::endl
+             << "J) Salir del menu " << std::endl
              << std::endl;
         std::cin >> operacion;
         operacion = std::tolower(operacion);
@@ -111,7 +112,11 @@ void gestorBibliotecas()
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
 
             break;
-        case 'i':
+        /* case 'i':
+            std::cout << "Mostrar bibliotecas en TablaHash " << std::endl;
+            tablaBiblioteca.mostrarBibliotecas();
+            break; */
+        case 'j':
             std::cout << "Saliendo del menu" << std::endl;
             aux = false;
             arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());

@@ -85,6 +85,28 @@ void Arbol::inorden(Nodo *raiz)
     }
 }
 
+void Arbol::recorreEInsertaEnTabla(Nodo* raiz, TablaHash tablaH) {
+    if (raiz != nullptr) {
+        tablaH.insertar(raiz->getBiblioteca()->getCodigo());
+
+        Nodo* hijoIzq = raiz->getHijoIzquierda();
+        Nodo* hijoDer = raiz->getHijoDerecha();
+
+        if (hijoIzq != nullptr) {
+            tablaH.insertar(hijoIzq->getBiblioteca()->getCodigo());
+        }
+
+        if (hijoDer != nullptr) {
+            tablaH.insertar(hijoDer->getBiblioteca()->getCodigo());
+        }
+
+        recorreEInsertaEnTabla(hijoIzq, tablaH);
+        recorreEInsertaEnTabla(hijoDer, tablaH);
+    }
+}
+
+
+
 Nodo *Arbol::encontrarPadre(string codigoBiblioteca)
 {
     Nodo *padre = nullptr;
