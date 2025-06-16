@@ -27,6 +27,7 @@ void gestorBibliotecas()
     do
     {
 
+
         cout << std::endl << "Por favor, ingrese una opción: "<< std::endl
              << "A) Cargar biblioteca. " << std::endl
              << "B) Buscar biblioteca por codigo.  " << std::endl

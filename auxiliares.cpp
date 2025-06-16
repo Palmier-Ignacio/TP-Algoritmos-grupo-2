@@ -4,7 +4,6 @@
 #include <sstream>
 #include "Biblioteca.h"
 #include "Prestamo.h"
-//#include "tablaHash.h"
 #include "arbol.h"
 
 using namespace std;
@@ -49,6 +48,7 @@ int cargarBibliotecas(string nombreArchivo,Arbol& arbol)
     return contadorBibliotecas;
    
 }
+
 
 void cargarPrestamos(string nombreArchivo, vector<Prestamo*>& prestamos){
     ifstream archivo(nombreArchivo.c_str());
