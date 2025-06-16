@@ -85,7 +85,7 @@ void Arbol::inorden(Nodo *raiz)
     }
 }
 
-void Arbol::recorreEInsertaEnTabla(Nodo* raiz, TablaHash tablaH) {
+void Arbol::recorreEInsertaEnTabla(Nodo* raiz, TablaHash& tablaH) {
     if (raiz != nullptr) {
         tablaH.insertar(raiz->getBiblioteca()->getCodigo());
 

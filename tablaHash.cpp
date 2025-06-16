@@ -7,7 +7,7 @@ using namespace std;
 TablaHash::TablaHash(int tamanio)
 {
     this->tamanio = tamanio;
-    // tabla = new Celda[tamanio];
+    tabla = new Celda[tamanio];
 }
 int TablaHash::funcionHash(const string &codigo)
 {
@@ -19,6 +19,7 @@ int TablaHash::funcionHash(const string &codigo)
 
 TablaHash::~TablaHash()
 {
+     delete[] tabla;
 }
 
 int TablaHash::getTamanio() { return tamanio; }
@@ -78,6 +79,20 @@ void TablaHash::insertar(string codigoBiblioteca)
     }
 }
 
+void TablaHash::eliminar(const string &clave){
+    int indiceBiblio = buscarIndiceDeClave(clave);
+
+    if (indiceBiblio != -1)
+    {
+        cout << "Eliminando a biblioteca " << indiceBiblio << "..." << endl;
+        tabla[indiceBiblio].cambiarEstado(BORRADO);
+        tabla[indiceBiblio].setValor("");
+    }
+    else
+    {
+        cout << "No se pudo encontrar el código de la biblioteca";
+    }
+}
 
 void TablaHash::buscarBiblioteca(string codigoBiblioteca)
 {
@@ -94,10 +109,15 @@ void TablaHash::buscarBiblioteca(string codigoBiblioteca)
 }
 
 void TablaHash::mostrarBibliotecas(){
-    cout << "Valores en Tabla: ";
-    for(int i = 0; i<tamanio;i++){
-        cout << tabla[i].getValor() <<", ";
+    cout << "Valores en Tabla:\n";
+    for(int i = 0; i < tamanio; i++){
+        cout << "Posición " << i << ": " << tabla[i].getValor() << " (Estado: ";
+        switch(tabla[i].getEstado()) {
+            case VACIO: cout << "VACIO"; break;
+            case EN_USO: cout << "EN_USO"; break;
+            case BORRADO: cout << "BORRADO"; break;
+        }
+        cout << ")\n";
     }
-    cout << "] ";
-};
+}
 

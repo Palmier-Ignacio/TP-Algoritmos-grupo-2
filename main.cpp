@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-//#include "tablaHash.h"
 #include "gestorBibliotecas.cpp"
 #include <vector>
 #include <string>
@@ -9,7 +8,7 @@ using namespace std;
 
 int main()
 {
-    gestorBibliotecas();
+   gestorBibliotecas(); 
     
     /* vector<Prestamo *> prestamos = {};
     cargarPrestamos("prestamos.txt", prestamos);

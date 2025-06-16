@@ -32,7 +32,7 @@ public:
 
     void inorden(Nodo *raiz);
 
-    void recorreEInsertaEnTabla(Nodo *raiz, TablaHash tablaH);
+    void recorreEInsertaEnTabla(Nodo *raiz, TablaHash& tablaH);
 
     Nodo *encontrarPadre(string codigoBiblioteca);
 

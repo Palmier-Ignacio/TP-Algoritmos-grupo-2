@@ -1,7 +1,7 @@
 #include "celda.h"
 
 Celda::Celda() {
-    this->valor = nullptr;
+    this->valor = "";
     this->estado = VACIO;
 }
 

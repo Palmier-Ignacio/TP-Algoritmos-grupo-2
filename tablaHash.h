@@ -17,6 +17,7 @@ public:
     TablaHash(int tamanio);
     ~TablaHash();
     void insertar(string valorBiblio);
+    void eliminar(const string &clave);
     int getTamanio();
     void buscarBiblioteca(string valorBiblio);
     void mostrarBibliotecas();
