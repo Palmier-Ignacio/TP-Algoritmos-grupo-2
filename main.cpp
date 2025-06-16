@@ -1,15 +1,10 @@
 #include <iostream>
 #include <fstream>
-//#include "tablaHash.h"
 //#include "gestorBibliotecas.cpp"
 #include <vector>
 #include <string>
-
 #include <sstream>
-
-
 #include "crearGrafo.h"
-
 
 using namespace std;
 
