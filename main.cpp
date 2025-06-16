@@ -1,10 +1,9 @@
 #include <iostream>
 #include <fstream>
-//#include "gestorBibliotecas.cpp"
+#include "gestorBibliotecas.cpp"
 #include <vector>
 #include <string>
-#include <sstream>
-#include "crearGrafo.h"
+ 
 
 using namespace std;
 
@@ -12,7 +11,7 @@ using namespace std;
 
 int main()
 {
-    //gestorBibliotecas();
+    gestorBibliotecas();
     
     /* vector<Prestamo *> prestamos = {};
     cargarPrestamos("prestamos.txt", prestamos);
@@ -25,11 +24,7 @@ int main()
     prestamos.clear(); */
 
 
-    Grafo* grafo = crearGrafoDesdeArchivo("bibliotecasDistancias.txt");
-    if (grafo) {
-        cout << grafo->toString() << endl;
-        delete grafo; // liberar memoria
-    }
+    /*  */
     return 0;
     
 }

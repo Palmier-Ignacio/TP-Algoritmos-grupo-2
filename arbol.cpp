@@ -37,7 +37,7 @@ Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
     }
     else
     {
-        nodo->setHijoIzquierda(insertarRecursivo(nodo->getHijoDerecha(), biblio));
+        nodo->setHijoDerecha(insertarRecursivo(nodo->getHijoDerecha(), biblio)); 
     }
     return nodo;
 }

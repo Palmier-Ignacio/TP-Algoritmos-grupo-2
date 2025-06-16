@@ -8,6 +8,8 @@
 #include "auxiliares.h"
 #include "tablaHash.h"
 #include "arbol.h"
+#include <sstream>
+#include "crearGrafo.h"
 
 using namespace std;
 
@@ -24,6 +26,12 @@ void gestorBibliotecas()
     arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
     arbolBibliotecas.recorreEInsertaEnTabla(arbolBibliotecas.getRaiz(),tablaBiblioteca); 
 
+
+    Grafo* grafo = crearGrafoDesdeArchivo("bibliotecasDistancias.txt");
+    if (grafo) {
+        cout << grafo->toString() << endl;
+        delete grafo; // liberar memoria
+    }
     do
     {
 
@@ -70,8 +78,6 @@ void gestorBibliotecas()
             Biblioteca *bibliotecaACargar = new Biblioteca(codigo, nombre, ciudad, superficie, cantidadLibros, cantidadUsuarios);
             arbolBibliotecas.insertar(bibliotecaACargar);
             tablaBiblioteca.insertar(codigo);
-            // agregar en tabla hash
-            // preguntar si hay q cargarlo en el archivo
             break;
         }
         case 'b':
