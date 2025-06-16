@@ -21,8 +21,6 @@ Nodo *Arbol::getRaiz()
 void Arbol::insertar(Biblioteca *nuevaBiblioteca)
 {
     raiz = insertarRecursivo(raiz, nuevaBiblioteca);
-    cout << "Se anadio con exito la biblioteca";
-    nuevaBiblioteca->mostrar();
 }
 
 Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
@@ -31,13 +29,13 @@ Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
     {
         nodo = new Nodo(biblio);
     }
-    else if (biblio->getCodigo() < nodo->getBiblioteca()->getCodigo())
+    else if (biblio->getCantidadUsuarios() < nodo->getBiblioteca()->getCantidadUsuarios())
     {
         nodo->setHijoIzquierda(insertarRecursivo(nodo->getHijoIzquierda(), biblio));
     }
     else
     {
-        nodo->setHijoDerecha(insertarRecursivo(nodo->getHijoDerecha(), biblio)); 
+        nodo->setHijoDerecha(insertarRecursivo(nodo->getHijoDerecha(), biblio));
     }
     return nodo;
 }
@@ -45,34 +43,6 @@ Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
 void Arbol::tratar(Nodo *nodo)
 {
     nodo->getBiblioteca()->mostrar();
-}
-
-int Arbol::cantidadNodos(Nodo *nodo)
-// La complejidad es O(n) porque pasa por todos los nodos que tiene el arbol
-{
-    if (nodo == nullptr)
-    {
-        return 0;
-    }
-    else
-    {
-        return 1 + cantidadNodos(nodo->getHijoIzquierda()) + cantidadNodos(nodo->getHijoDerecha());
-    }
-}
-
-int Arbol::altura(Nodo *nodo)
-// La complejidad es O(n) porque pasapor todos los nodos que tiene el arbol
-{
-    if (nodo == nullptr)
-    {
-        return 0;
-    }
-    else
-    {
-        int alturaIzq = altura(nodo->getHijoIzquierda());
-        int alturaDer = altura(nodo->getHijoDerecha());
-        return 1 + max(alturaIzq, alturaDer);
-    }
 }
 
 void Arbol::inorden(Nodo *raiz)
@@ -85,18 +55,22 @@ void Arbol::inorden(Nodo *raiz)
     }
 }
 
-void Arbol::recorreEInsertaEnTabla(Nodo* raiz, TablaHash& tablaH) {
-    if (raiz != nullptr) {
+void Arbol::recorreEInsertaEnTabla(Nodo *raiz, TablaHash &tablaH)
+{
+    if (raiz != nullptr)
+    {
         tablaH.insertar(raiz->getBiblioteca()->getCodigo());
 
-        Nodo* hijoIzq = raiz->getHijoIzquierda();
-        Nodo* hijoDer = raiz->getHijoDerecha();
+        Nodo *hijoIzq = raiz->getHijoIzquierda();
+        Nodo *hijoDer = raiz->getHijoDerecha();
 
-        if (hijoIzq != nullptr) {
+        if (hijoIzq != nullptr)
+        {
             tablaH.insertar(hijoIzq->getBiblioteca()->getCodigo());
         }
 
-        if (hijoDer != nullptr) {
+        if (hijoDer != nullptr)
+        {
             tablaH.insertar(hijoDer->getBiblioteca()->getCodigo());
         }
 
@@ -104,8 +78,6 @@ void Arbol::recorreEInsertaEnTabla(Nodo* raiz, TablaHash& tablaH) {
         recorreEInsertaEnTabla(hijoDer, tablaH);
     }
 }
-
-
 
 Nodo *Arbol::encontrarPadre(string codigoBiblioteca)
 {
@@ -140,7 +112,12 @@ Nodo *Arbol::encontrarPadre(string codigoBiblioteca)
 void Arbol::eliminarCaso1(Nodo *padreNodo, string codigoBiblioteca)
 {
     Nodo *aux;
-    if (padreNodo->getHijoDerecha() and padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    if (padreNodo == nullptr) // es raiz x lo que no tiene padre
+    {
+        aux = raiz;
+        raiz = nullptr;
+    }
+    else if (padreNodo->getHijoDerecha() and padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
     {
         aux = padreNodo->getHijoDerecha();
         padreNodo->setHijoDerecha(nullptr);
@@ -158,7 +135,11 @@ void Arbol::eliminarCaso2(Nodo *padreNodo, string codigoBiblioteca)
     Nodo *aux;
     bool esDerecha;
 
-    if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    if (padreNodo == nullptr)
+    {
+        aux = raiz;
+    }
+    else if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
     {
         aux = padreNodo->getHijoDerecha();
         esDerecha = true;
@@ -171,10 +152,18 @@ void Arbol::eliminarCaso2(Nodo *padreNodo, string codigoBiblioteca)
 
     Nodo *hijoUnico = aux->getHijoIzquierda() ? aux->getHijoIzquierda() : aux->getHijoDerecha();
 
-    if (esDerecha)
+    if (padreNodo == nullptr)
+    {
+        raiz = hijoUnico;
+    }
+    else if (esDerecha)
+    {
         padreNodo->setHijoDerecha(hijoUnico);
+    }
     else
+    {
         padreNodo->setHijoIzquierda(hijoUnico);
+    }
 
     delete aux;
 };
@@ -184,13 +173,10 @@ Nodo *Arbol::padreMayorDeSubarbol(Nodo *nodo)
     Nodo *padre = nodo;
     Nodo *actual = nodo;
 
-    if (!actual)
+    while (actual && actual->getHijoDerecha())
     {
-        while (actual->getHijoDerecha())
-        {
-            padre = actual;
-            actual = actual->getHijoDerecha();
-        }
+        padre = actual;
+        actual = actual->getHijoDerecha();
     }
 
     return padre;
@@ -198,91 +184,105 @@ Nodo *Arbol::padreMayorDeSubarbol(Nodo *nodo)
 
 void Arbol::eliminarCaso3(Nodo *padreNodo, string codigoBiblioteca)
 {
-    Nodo *aux;
+    Nodo *nodoAEliminar;
 
-    // Obtener puntero al nodo que contiene el código a eliminar
-    if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    if (padreNodo == nullptr)
     {
-        aux = padreNodo->getHijoDerecha();
+        nodoAEliminar = raiz;
+    }
+    else if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    {
+        nodoAEliminar = padreNodo->getHijoDerecha();
     }
     else
     {
-        aux = padreNodo->getHijoIzquierda();
+        nodoAEliminar = padreNodo->getHijoIzquierda();
     }
 
-    // Paso 1: Obtener padre del mayor de los menores
-    Nodo *padreMayorMenores = padreMayorDeSubarbol(aux->getHijoIzquierda());
+    // nodo mayor del subárbol izquierdo
+    Nodo *padreDelMayor = nodoAEliminar;
+    Nodo *mayor = nodoAEliminar->getHijoIzquierda();
 
-    Nodo *mayorMenor;
-
-    // Caso especial: el hijo izquierdo de aux es el mayor de los menores
-    if (padreMayorMenores == aux)
+    while (mayor->getHijoDerecha() != nullptr)
     {
-        mayorMenor = aux->getHijoIzquierda();
+        padreDelMayor = mayor;
+        mayor = mayor->getHijoDerecha();
+    }
+
+    //veo si el mayor es hijo directo del nodo a eliminar
+    if (padreDelMayor == nodoAEliminar)
+    {
+        mayor->setHijoDerecha(nodoAEliminar->getHijoDerecha());
     }
     else
     {
-        mayorMenor = padreMayorMenores->getHijoDerecha();
+        padreDelMayor->setHijoDerecha(mayor->getHijoIzquierda());
+        mayor->setHijoIzquierda(nodoAEliminar->getHijoIzquierda());
+        mayor->setHijoDerecha(nodoAEliminar->getHijoDerecha());
     }
 
-    // Paso 2: reconectar el padre del nodo que contiene x con el nuevo nodo
-    if (padreNodo->getHijoDerecha() == aux)
+    // uno al padre del nodo original al nuevo nodo
+    if (padreNodo == nullptr)
     {
-        padreNodo->setHijoDerecha(mayorMenor);
+        raiz = mayor;
+    }
+    else if (padreNodo->getHijoIzquierda() == nodoAEliminar)
+    {
+        padreNodo->setHijoIzquierda(mayor);
     }
     else
     {
-        padreNodo->setHijoIzquierda(mayorMenor);
+        padreNodo->setHijoDerecha(mayor);
     }
 
-    // Paso 3: reconectar los hijos del nodo original (aux) al nuevo nodo
-    mayorMenor->setHijoIzquierda(aux->getHijoIzquierda());
-    mayorMenor->setHijoDerecha(aux->getHijoDerecha());
-
-    // Paso 4: eliminar el nodo mayor de los menores desde su antigua posición
-    if (mayorMenor->getHijoIzquierda() == nullptr && mayorMenor->getHijoDerecha() == nullptr)
-    {
-        eliminarCaso1(padreMayorMenores, mayorMenor->getBiblioteca()->getCodigo());
-    }
-    else
-    {
-        eliminarCaso2(padreMayorMenores, mayorMenor->getBiblioteca()->getCodigo());
-    }
-
-    // Paso 5: eliminar el nodo original
-    delete aux;
-};
+    delete nodoAEliminar;
+}
 
 void Arbol::borrar(string codigoBiblioteca)
 {
-    Nodo *padreNodo = encontrarPadre(codigoBiblioteca);
-    if (padreNodo != nullptr)
-    {
-        Nodo *nodoConCodigo = nullptr;
-        if (padreNodo->getHijoDerecha() and padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
-        {
-            nodoConCodigo = padreNodo->getHijoDerecha();
-        }
-        else
-        {
-            nodoConCodigo = padreNodo->getHijoIzquierda();
-        }
 
-        if (nodoConCodigo->getHijoIzquierda() == nullptr and nodoConCodigo->getHijoDerecha() == nullptr)
-        {
-            eliminarCaso1(padreNodo, codigoBiblioteca);
-        }
-        else if (nodoConCodigo->getHijoIzquierda() == nullptr or nodoConCodigo->getHijoDerecha() == nullptr)
-        {
-            eliminarCaso2(padreNodo, codigoBiblioteca);
-        }
+    if (raiz && raiz->getBiblioteca()->getCodigo() == codigoBiblioteca)
+    {
+        Nodo *nodoConCodigo = raiz;
+
+        if (!nodoConCodigo->getHijoIzquierda() && !nodoConCodigo->getHijoDerecha())
+            eliminarCaso1(nullptr, codigoBiblioteca);
+        else if (!nodoConCodigo->getHijoIzquierda() || !nodoConCodigo->getHijoDerecha())
+            eliminarCaso2(nullptr, codigoBiblioteca);
         else
+            eliminarCaso3(nullptr, codigoBiblioteca);
+    }
+    else
+    {
+
+        Nodo *padreNodo = encontrarPadre(codigoBiblioteca);
+        if (padreNodo != nullptr)
         {
-            eliminarCaso3(padreNodo, codigoBiblioteca);
+            Nodo *nodoConCodigo = nullptr;
+            if (padreNodo->getHijoDerecha() and padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
+            {
+                nodoConCodigo = padreNodo->getHijoDerecha();
+            }
+            else
+            {
+                nodoConCodigo = padreNodo->getHijoIzquierda();
+            }
+
+            if (nodoConCodigo->getHijoIzquierda() == nullptr and nodoConCodigo->getHijoDerecha() == nullptr)
+            {
+                eliminarCaso1(padreNodo, codigoBiblioteca);
+            }
+            else if (nodoConCodigo->getHijoIzquierda() == nullptr or nodoConCodigo->getHijoDerecha() == nullptr)
+            {
+                eliminarCaso2(padreNodo, codigoBiblioteca);
+            }
+            else
+            {
+                eliminarCaso3(padreNodo, codigoBiblioteca);
+            }
         }
     }
 }
-
 void Arbol::buscar(Nodo *nodo, string codigoBiblioteca)
 {
     if (nodo != NULL)

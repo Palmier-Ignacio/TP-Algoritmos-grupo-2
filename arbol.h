@@ -24,10 +24,6 @@ public:
 
     void tratar(Nodo *nodo);
 
-    int cantidadNodos(Nodo *nodo);
-
-    int altura(Nodo *nodo);
-
     void liberar(Nodo *nodo);
 
     void inorden(Nodo *raiz);
