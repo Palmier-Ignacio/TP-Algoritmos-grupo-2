@@ -9,7 +9,8 @@
 #include "tablaHash.h"
 #include "arbol.h"
 #include <sstream>
-#include "crearGrafo.h"
+#include "grafo.h"
+#include <limits>
 
 using namespace std;
 
@@ -27,11 +28,14 @@ void gestorBibliotecas()
     arbolBibliotecas.recorreEInsertaEnTabla(arbolBibliotecas.getRaiz(),tablaBiblioteca); 
 
 
-    Grafo* grafo = crearGrafoDesdeArchivo("bibliotecasDistancias.txt");
-    if (grafo) {
-        cout << grafo->toString() << endl;
-        delete grafo; // liberar memoria
+    Grafo* grafo = Grafo::crearDesdeArchivo("bibliotecasDistancias.txt");
+    if (!grafo) {
+        cout << "Error cargando el grafo de distancias." << endl;
+        return;
     }
+
+    grafo->floydWarshall();  // Ejecutar algoritmo una sola vez al inicio
+    
     do
     {
 
@@ -109,9 +113,41 @@ void gestorBibliotecas()
             // DE MOMENTO PONGO EN INORDEN ORDENADAS POR CODIGO
             arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
             break;
-        case 'e':
-            std::cout << "La opción que usted eligió es " << operacion << std::endl;
+        case 'e': {
+            cout << "Ingrese biblioteca origen: ";
+            string origen;
+            cin >> origen;
+            cout << "Ingrese biblioteca destino: ";
+            string destino;
+            cin >> destino;
+
+            int idxOrigen = grafo->obtenerIndicePorNombre(origen);
+            int idxDestino = grafo->obtenerIndicePorNombre(destino);
+
+            if (idxOrigen == -1 || idxDestino == -1) {
+                cout << "Alguna biblioteca no fue encontrada." << endl;
+                break;
+            }
+
+            // Obtener distancia mínima
+            double distancia = grafo->obtenerDistancia(idxOrigen, idxDestino);
+
+            if (distancia == std::numeric_limits<double>::infinity()) {
+                cout << "No hay camino entre las bibliotecas." << endl;
+                break;
+            }
+            cout << "Distancia mínima: " << distancia << endl;
+
+            // Obtener camino mínimo
+            vector<string> camino = grafo->obtenerCaminoMinimo(idxOrigen, idxDestino);
+            cout << "Camino mínimo: ";
+            for (const auto& biblio : camino) {
+                cout << biblio;
+                if (&biblio != &camino.back()) cout << " -> ";
+            }
+            cout << endl;
             break;
+        }
         case 'f':
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             break;
@@ -127,10 +163,10 @@ void gestorBibliotecas()
             tablaBiblioteca.mostrarBibliotecas(); 
             break; 
         case 'j':
-            std::cout << "Saliendo del menu" << std::endl;
+            cout << "Saliendo del menu" << endl;
             aux = false;
             arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());
-
+            delete grafo;  // liberar memoria del grafo
             break;
         default:
             std::cout << "Operación no válida." << std::endl;

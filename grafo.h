@@ -5,22 +5,27 @@
 #include <string>
 #include "nodoGrafo.h" 
 
-using namespace std;
 // Forward declaration para evitar inclusión circular
 class Adyacente;
 
 class Grafo {
 private:
-    vector<NodoGrafo*> nodos;
+    std::vector<std::vector<double>> matrizDistancias;
+    std::vector<std::vector<int>> matrizCaminos; 
+    std::vector<NodoGrafo*> nodos;
 
 public:
+    double obtenerDistancia(int indiceOrigen, int indiceDestino);
+    void floydWarshall();
+    std::vector<std::string> obtenerCaminoMinimo(int indiceOrigen, int indiceDestino);
+    int obtenerIndicePorNombre(const std::string& nombre);
     void addNodo(NodoGrafo* nodo);
-    
-    vector<NodoGrafo*>& getNodos();
+    std::vector<NodoGrafo*>& getNodos();
+    std::string toString();
+    ~Grafo();
 
-    string toString();
-
-    ~Grafo(); 
+    // Método estático para crear un grafo desde archivo
+    static Grafo* crearDesdeArchivo(const std::string& nombreArchivo);
 };
 
 #endif
