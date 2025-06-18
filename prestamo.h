@@ -42,8 +42,6 @@ public:
   // pos: setea la fecha del prestamo pasado por parametro
   void setFechaPrestamo(string nuevaFechaPrestamo);
 
-  // pos: valor total de prestamos de la biblioteca durante el periodo dado
-  int totalPrestamosDeBiblioteca_Durante_(Biblioteca unaBiblioteca, string fechaInicio, string fechaFin);
 
   // pos: devuelve una lista de los codigos de bibliotecas con mas de "X" carga de prestamos en una semana
   vector<string> detectarBibliotecasConAltaCargaSemanal(int cantidadDePrestamos);

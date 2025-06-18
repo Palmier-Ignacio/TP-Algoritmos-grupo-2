@@ -1,4 +1,6 @@
 #include "prestamo.h"
+#include <fstream>
+#include <sstream>
 //include <ctime> puede que nos sirva para la fecha
 
 //---------------------Constructor y Destructor-----------------------------
@@ -10,7 +12,7 @@ Prestamo::Prestamo(string codigo_biblioteca, string ISBN, string usuario_id, str
 }
 
 Prestamo::~Prestamo() {
-  // hacer algo...
+
 }
 
 //---------------------Getters y Setters-----------------------------
@@ -55,11 +57,8 @@ void Prestamo::setFechaPrestamo(string nuevaFechaPrestamo) {
   fecha_prestamo = nuevaFechaPrestamo;
 }
 
-//----------------------Metodos requeridos-----------------------------
 
-int Prestamo::totalPrestamosDeBiblioteca_Durante_(Biblioteca unaBiblioteca, string fechaInicio, string fechaFin) {
-  return 0;
-}
+//----------------------Metodos requeridos-----------------------------
 
 vector<string> Prestamo::detectarBibliotecasConAltaCargaSemanal(int cantidadDePrestamos){
     return vector<string>();

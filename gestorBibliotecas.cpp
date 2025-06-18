@@ -35,6 +35,12 @@ void gestorBibliotecas()
     }
 
     grafo->floydWarshall();  // Ejecutar algoritmo una sola vez al inicio
+
+    //crear vector con prestamos que vienen de prestamos.txt
+    vector<Prestamo*> prestamos;
+    //usamos el metodo cargarPrestamos para cargar los prestamos desde el archivo
+    cargarPrestamos("prestamos.txt", prestamos);
+
     
     do
     {
@@ -46,8 +52,8 @@ void gestorBibliotecas()
              << "C) Eliminar biblioteca existente   " << std::endl
              << "D) Mostrar todas las bibliotecas  " << std::endl
              << "E) Calcular distancia entre bibliotecas   " << std::endl
-             << "F) Calcular el total de prestamos de biblioteca   " << std::endl
-             << "G) Detectar bibliotecas con alta carga  " << std::endl
+             << "F) Calcular el total de prestamos de biblioteca durante un periodo  " << std::endl
+             << "G) Detectar bibliotecas con alta carga en una semana " << std::endl
              << "H) Buscar todos los prestamos de usuario por ISBN " << std::endl
              << "I) Mostrar bibliotecas en TablaHash " << std::endl
              << "J) Salir del menu " << std::endl
@@ -148,16 +154,73 @@ void gestorBibliotecas()
             cout << endl;
             break;
         }
-        case 'f':
+
+
+        case 'f': {
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
+            string codigoBiblioteca;
+            string fechaInicio;
+            string fechaFin;
+
+            cout << "Por favor, ingrese el codigo de la biblioteca: ";
+            cin >> codigoBiblioteca;
+
+            cout << "Por favor, ingrese la fecha de inicio (YYYYMMDD): ";
+            cin >> fechaInicio;
+
+            cout << "Por favor, ingrese la fecha de fin (YYYYMMDD): ";
+            cin >> fechaFin;
+            
+            // Si la biblioteca fue encontrada, llamamos al método totalPrestamosDeBiblioteca_Durante_
+            int totalPrestamos = totalPrestamosDeBiblioteca_Durante_(prestamos, codigoBiblioteca, fechaInicio, fechaFin);
+            if (totalPrestamos >= 0) {
+                cout << "Total de prestamos de la biblioteca " << codigoBiblioteca << " durante el periodo " 
+                     << fechaInicio << " a " << fechaFin << ": " << totalPrestamos << endl;
+            } else {
+                cout << "No se encontraron prestamos para la biblioteca con codigo: " << codigoBiblioteca << endl;
+            }
             break;
-        case 'g':
+        }
+        case 'g':{
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
-            break;
-        case 'h':
-            std::cout << "La opción que usted eligió es " << operacion << std::endl;
+            int cantidadDePrestamos;
+            string fechaInicioAltaCarga;
+            string fechaFinAltaCarga;
+            cout << "Por favor, ingrese la cantidad de prestamos que desea considerar para alta carga: ";
+            cin >> cantidadDePrestamos;
+            cout << "Por favor, ingrese la fecha de inicio (YYYYMMDD): ";
+            cin >> fechaInicioAltaCarga;
+            cout << "Por favor, ingrese la fecha de fin (YYYYMMDD): ";
+            cin >> fechaFinAltaCarga;
+            vector<string> bibliotecasConAltaCarga = detectarBibliotecasConAltaCargaSemanal(prestamos, cantidadDePrestamos, fechaInicioAltaCarga, fechaFinAltaCarga);
+            if (bibliotecasConAltaCarga.empty()) {
+                cout << "No se encontraron bibliotecas con alta carga en el periodo especificado." << endl;
+            } else {
+                cout << "Bibliotecas con alta carga en el periodo " << fechaInicioAltaCarga << " a " << fechaFinAltaCarga << ":" << endl;
+                for (const string& codigo : bibliotecasConAltaCarga) {
+                    cout << "- " << codigo << endl;
+                }
+            }
 
             break;
+        }
+        case 'h':{
+            std::cout << "La opción que usted eligió es " << operacion << std::endl;
+            string ISBN;
+            cout << "Por favor, ingrese el ISBN del libro: ";
+            cin >> ISBN;
+            vector<Prestamo> prestamosUsuario = obtenerPrestamosDeUsuarioPorISBN(prestamos, ISBN);
+            if (prestamosUsuario.empty()) {
+                cout << "No se encontraron prestamos para el ISBN: " << ISBN << endl;
+            } else {
+                cout << "Prestamos encontrados para el ISBN " << ISBN << ":" << endl;
+                for (Prestamo& prestamo : prestamosUsuario) {
+                    prestamo.mostrar();
+                }
+
+            }
+            break;
+        }
         case 'i':
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             tablaBiblioteca.mostrarBibliotecas(); 
