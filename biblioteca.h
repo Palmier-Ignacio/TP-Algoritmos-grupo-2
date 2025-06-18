@@ -1,7 +1,13 @@
 #ifndef BIBLIOTECA_H_INCLUDED
 #define BIBLIOTECA_H_INCLUDED
+#include <fstream>
+#include <vector>
+#include <sstream>
 #include <iostream>
 using namespace std;
+
+class Arbol; 
+
 
 class Biblioteca
 {
@@ -17,15 +23,9 @@ private:
 public:
     // constructor
     // pos: crea una biblioteca con sus atributos
-    Biblioteca(string codigo,string nombre,string ciudad,float superficie,int cantidadLibros,int cantidadUsuarios);
-
-    // pos: libera la memoria
-    virtual ~Biblioteca();
-    
+    Biblioteca(string codigo, string nombre, string ciudad, float superficie, int cantidadLibros, int cantidadUsuarios);
     // pos: imprime los datos de la biblioteca
     void mostrar();
-    
-    
     // pos: imprime el codigo de la biblioteca
     string getCodigo();
     // pos: imprime el nombre de la biblioteca
@@ -38,7 +38,6 @@ public:
     int getCantidadLibros();
     // pos: imprime la cantidad de usuarios que tiene la biblioteca
     int getCantidadUsuarios();
-    
     // pos: setea el codigo de la biblioteca pasado por parametro
     void setCodigo(string nuevoCodigo);
     // pos: setea el nombre de la biblioteca pasado por parametro
@@ -51,7 +50,8 @@ public:
     void setCantidadLibros(int nuevaCantidadLibros);
     // pos: setea la cantidad de usuarios de la biblioteca pasado por parametro
     void setCantidadUsuarios(int nuevaCantidadUsuarios);
-
+    //pos: carga a un arbol las bibliotecas leidas en un archivo
+    static int cargarBibliotecas(string nombreArchivo, Arbol &arbol);
 };
 
-#endif 
+#endif

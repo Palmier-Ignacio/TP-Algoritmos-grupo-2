@@ -4,7 +4,7 @@
 #include <iostream>
 #include "nodo.h"
 #include "tablaHash.h"
-#include <stack>
+#include "biblioteca.h"
 
 class Arbol
 {
@@ -20,7 +20,7 @@ public:
 
     Nodo *getRaiz();
 
-    void insertar(Biblioteca *nuevaBiblioteca);
+    Nodo * insertar(Biblioteca *nuevaBiblioteca);
 
     void tratar(Nodo *nodo);
 
@@ -30,9 +30,9 @@ public:
 
     void recorreEInsertaEnTabla(Nodo *raiz, TablaHash& tablaH);
 
-    Nodo *encontrarPadre(string codigoBiblioteca);
+    Nodo *encontrarPadre(string codigoBiblioteca, int cantidadUsuarios);
 
-    void borrar(string codigoBiblioteca);
+    bool borrar(string codigoBiblioteca, int cantidadUsuarios);
 
     Nodo *padreMayorDeSubarbol(Nodo *nodo);
 
@@ -42,7 +42,7 @@ public:
 
     void eliminarCaso3(Nodo *nodo, string codigoBiblioteca);
 
-    void buscar(Nodo *nodo, string codigoBiblioteca);
+    void buscar(Nodo *nodo, string codigoBiblioteca, int cantidadUsuarios);
 };
 
 #endif

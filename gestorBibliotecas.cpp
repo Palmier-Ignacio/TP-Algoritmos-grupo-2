@@ -20,35 +20,29 @@ void gestorBibliotecas()
     bool aux = true;
 
     Arbol arbolBibliotecas;
-    int cantidadBibliotecas = cargarBibliotecas("bibliotecas.txt", arbolBibliotecas);
+    int cantidadBibliotecas = Biblioteca::cargarBibliotecas("bibliotecas.txt", arbolBibliotecas);
     int tamanioTabla = cantidadBibliotecas / 0.8; // fijarnos esto
     TablaHash tablaBiblioteca = TablaHash(tamanioTabla);
+    arbolBibliotecas.recorreEInsertaEnTabla(arbolBibliotecas.getRaiz(), tablaBiblioteca);
 
-    arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
-    arbolBibliotecas.recorreEInsertaEnTabla(arbolBibliotecas.getRaiz(),tablaBiblioteca); 
-
-
-    Grafo* grafo = Grafo::crearDesdeArchivo("bibliotecasDistancias.txt");
-    if (!grafo) {
+    Grafo *grafo = Grafo::crearDesdeArchivo("bibliotecasDistancias.txt");
+    if (!grafo)
+    {
         cout << "Error cargando el grafo de distancias." << endl;
         return;
     }
 
-    grafo->floydWarshall();  // Ejecutar algoritmo una sola vez al inicio
+    grafo->floydWarshall(); // Ejecutar algoritmo una sola vez al inicio
 
-    //crear vector con prestamos que vienen de prestamos.txt
-    vector<Prestamo*> prestamos;
-    //usamos el metodo cargarPrestamos para cargar los prestamos desde el archivo
-    cargarPrestamos("prestamos.txt", prestamos);
+    vector<Prestamo *> prestamos;
+    Prestamo::cargarPrestamos("prestamos.txt", prestamos);
 
-    
     do
     {
-
-
-        cout << std::endl << "Por favor, ingrese una opción: "<< std::endl
+        cout << std::endl
+             << "Por favor, ingrese una opción: " << std::endl
              << "A) Cargar biblioteca. " << std::endl
-             << "B) Buscar biblioteca por codigo.  " << std::endl
+             << "B) Buscar biblioteca.  " << std::endl
              << "C) Eliminar biblioteca existente   " << std::endl
              << "D) Mostrar todas las bibliotecas  " << std::endl
              << "E) Calcular distancia entre bibliotecas   " << std::endl
@@ -86,7 +80,15 @@ void gestorBibliotecas()
             cin >> cantidadUsuarios;
 
             Biblioteca *bibliotecaACargar = new Biblioteca(codigo, nombre, ciudad, superficie, cantidadLibros, cantidadUsuarios);
-            arbolBibliotecas.insertar(bibliotecaACargar);
+            if (arbolBibliotecas.insertar(bibliotecaACargar))
+            {
+                cout << "Se añadio con exito al arbol la biblioteca con codigo: " << bibliotecaACargar->getCodigo() << endl;
+            }
+            else
+            {
+                cout << "No se pudo añadir la biblioteca en el arbol." << endl;
+            }
+
             tablaBiblioteca.insertar(codigo);
             break;
         }
@@ -94,32 +96,35 @@ void gestorBibliotecas()
         {
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             string codigoBibliotecaABuscar;
+            int cantUsuariosBiblioteca;
             cout << "Por favor, ingrese el codigo de la biblioteca que desea buscar: ";
             cin >> codigoBibliotecaABuscar;
-            arbolBibliotecas.buscar(arbolBibliotecas.getRaiz(), codigoBibliotecaABuscar);
+            cout << "Por favor, ingrese la cantidad de usuarios de la biblioteca que desea buscar: ";
+            cin >> cantUsuariosBiblioteca;
+            arbolBibliotecas.buscar(arbolBibliotecas.getRaiz(), codigoBibliotecaABuscar, cantUsuariosBiblioteca);
             tablaBiblioteca.buscarBiblioteca(codigoBibliotecaABuscar);
-
             break;
         }
         case 'c':
         {
-            // ERROR AL QUERER BORRAR RAIZ, ARREGLAR
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             string codigoBibliotecaABorrar;
-            cout  << "Por favor, ingrese el nombre de la biblioteca que desea eliminar: ";
+            int cantUsuariosBiblioteca;
+            cout << "Por favor, ingrese el codigo de la biblioteca que desea eliminar: ";
             cin >> codigoBibliotecaABorrar;
-            arbolBibliotecas.borrar(codigoBibliotecaABorrar);
-            tablaBiblioteca.eliminar(codigoBibliotecaABorrar);
+            cout << "Por favor, ingrese la cantidad de usuarios de la biblioteca que desea eliminar: ";
+            cin >> cantUsuariosBiblioteca;
+            bool seBorroEnArbol= arbolBibliotecas.borrar(codigoBibliotecaABorrar, cantUsuariosBiblioteca);
+            if (seBorroEnArbol)
+                tablaBiblioteca.eliminar(codigoBibliotecaABorrar);
         }
-
         break;
         case 'd':
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
-            //PREGUNTAR SI HAY QUE DAR LAS TRES OPCIONES O SI ELEGIMOS NOSOTROS
-            // DE MOMENTO PONGO EN INORDEN ORDENADAS POR CODIGO
             arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
             break;
-        case 'e': {
+        case 'e':
+        {
             cout << "Ingrese biblioteca origen: ";
             string origen;
             cin >> origen;
@@ -130,7 +135,8 @@ void gestorBibliotecas()
             int idxOrigen = grafo->obtenerIndicePorNombre(origen);
             int idxDestino = grafo->obtenerIndicePorNombre(destino);
 
-            if (idxOrigen == -1 || idxDestino == -1) {
+            if (idxOrigen == -1 || idxDestino == -1)
+            {
                 cout << "Alguna biblioteca no fue encontrada." << endl;
                 break;
             }
@@ -138,7 +144,8 @@ void gestorBibliotecas()
             // Obtener distancia mínima
             double distancia = grafo->obtenerDistancia(idxOrigen, idxDestino);
 
-            if (distancia == std::numeric_limits<double>::infinity()) {
+            if (distancia == std::numeric_limits<double>::infinity())
+            {
                 cout << "No hay camino entre las bibliotecas." << endl;
                 break;
             }
@@ -147,16 +154,18 @@ void gestorBibliotecas()
             // Obtener camino mínimo
             vector<string> camino = grafo->obtenerCaminoMinimo(idxOrigen, idxDestino);
             cout << "Camino mínimo: ";
-            for (const auto& biblio : camino) {
+            for (const auto &biblio : camino)
+            {
                 cout << biblio;
-                if (&biblio != &camino.back()) cout << " -> ";
+                if (&biblio != &camino.back())
+                    cout << " -> ";
             }
             cout << endl;
             break;
         }
 
-
-        case 'f': {
+        case 'f':
+        {
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             string codigoBiblioteca;
             string fechaInicio;
@@ -170,18 +179,20 @@ void gestorBibliotecas()
 
             cout << "Por favor, ingrese la fecha de fin (YYYYMMDD): ";
             cin >> fechaFin;
-            
+
             // Si la biblioteca fue encontrada, llamamos al método totalPrestamosDeBiblioteca_Durante_
-            int totalPrestamos = totalPrestamosDeBiblioteca_Durante_(prestamos, codigoBiblioteca, fechaInicio, fechaFin);
-            if (totalPrestamos >= 0) {
-                cout << "Total de prestamos de la biblioteca " << codigoBiblioteca << " durante el periodo " 
+            int totalPrestamos = Prestamo::totalPrestamosDeBiblioteca_Durante_(prestamos, codigoBiblioteca, fechaInicio, fechaFin);
+            if (totalPrestamos >= 0)
+            {
+                cout << "Total de prestamos de la biblioteca " << codigoBiblioteca << " durante el periodo "
                      << fechaInicio << " a " << fechaFin << ": " << totalPrestamos << endl;
-            } else {
-                cout << "No se encontraron prestamos para la biblioteca con codigo: " << codigoBiblioteca << endl;
             }
+            else
+                cout << "No se encontraron prestamos para la biblioteca con codigo: " << codigoBiblioteca << endl;
             break;
         }
-        case 'g':{
+        case 'g':
+        {
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             int cantidadDePrestamos;
             string fechaInicioAltaCarga;
@@ -192,49 +203,51 @@ void gestorBibliotecas()
             cin >> fechaInicioAltaCarga;
             cout << "Por favor, ingrese la fecha de fin (YYYYMMDD): ";
             cin >> fechaFinAltaCarga;
-            vector<string> bibliotecasConAltaCarga = detectarBibliotecasConAltaCargaSemanal(prestamos, cantidadDePrestamos, fechaInicioAltaCarga, fechaFinAltaCarga);
-            if (bibliotecasConAltaCarga.empty()) {
+            vector<string> bibliotecasConAltaCarga = Prestamo::detectarBibliotecasConAltaCargaSemanal(prestamos, cantidadDePrestamos, fechaInicioAltaCarga, fechaFinAltaCarga);
+            if (bibliotecasConAltaCarga.empty())
                 cout << "No se encontraron bibliotecas con alta carga en el periodo especificado." << endl;
-            } else {
+            else
+            {
                 cout << "Bibliotecas con alta carga en el periodo " << fechaInicioAltaCarga << " a " << fechaFinAltaCarga << ":" << endl;
-                for (const string& codigo : bibliotecasConAltaCarga) {
+                for (const string &codigo : bibliotecasConAltaCarga)
                     cout << "- " << codigo << endl;
-                }
             }
-
             break;
         }
-        case 'h':{
+        case 'h':
+        {
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
             string ISBN;
             cout << "Por favor, ingrese el ISBN del libro: ";
             cin >> ISBN;
-            vector<Prestamo> prestamosUsuario = obtenerPrestamosDeUsuarioPorISBN(prestamos, ISBN);
-            if (prestamosUsuario.empty()) {
+            vector<Prestamo> prestamosUsuario = Prestamo::obtenerPrestamosDeUsuarioPorISBN(prestamos, ISBN);
+            if (prestamosUsuario.empty())
                 cout << "No se encontraron prestamos para el ISBN: " << ISBN << endl;
-            } else {
+            else
+            {
                 cout << "Prestamos encontrados para el ISBN " << ISBN << ":" << endl;
-                for (Prestamo& prestamo : prestamosUsuario) {
+                for (Prestamo &prestamo : prestamosUsuario)
                     prestamo.mostrar();
-                }
-
             }
             break;
         }
         case 'i':
             std::cout << "La opción que usted eligió es " << operacion << std::endl;
-            tablaBiblioteca.mostrarBibliotecas(); 
-            break; 
+            tablaBiblioteca.mostrarBibliotecas();
+            break;
         case 'j':
             cout << "Saliendo del menu" << endl;
             aux = false;
             arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());
-            delete grafo;  // liberar memoria del grafo
+            delete grafo; // liberar memoria del grafo
+
+            for (Prestamo *prest : prestamos)
+                delete prest;
+            // prestamos.clear();
             break;
         default:
             std::cout << "Operación no válida." << std::endl;
         }
-    Sleep(3000); 
+        Sleep(3000);
     } while (aux);
-    arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());
 }
