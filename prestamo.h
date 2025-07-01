@@ -39,9 +39,9 @@ public:
   // pos: setea la fecha del prestamo pasado por parametro
   void setFechaPrestamo(string nuevaFechaPrestamo);
   // pos: devuelve una lista de los codigos de bibliotecas con mas de "X" carga de prestamos en una semana
-  static vector<string> detectarBibliotecasConAltaCargaSemanal(vector<Prestamo *> prestamos, int cantidadDePrestamos, string fechaInicio, string fechaFin);
+  static vector<string> detectarBibliotecasConAltaCargaSemanal(vector<Prestamo *> prestamos, int cantidadDePrestamos);
   // pos: devuelve una lista de todos los prestamos de un usuario
-  static vector<Prestamo> obtenerPrestamosDeUsuarioPorISBN(vector<Prestamo *> prestamos, string ISBN);
+  static vector<Prestamo> obtenerPrestamosDeUsuarioPorISBN(vector<Prestamo *> prestamos, string codigoUsuario);
   // pos: devuelve la cantidad de prestamos de un un libro durante las fechas recibidas
   static int totalPrestamosDeBiblioteca_Durante_(vector<Prestamo *> prestamos, string codigo, string fechaInicio, string fechaFin);
   // pos: carga los prestamos leidos en un archivo de texto a un vector

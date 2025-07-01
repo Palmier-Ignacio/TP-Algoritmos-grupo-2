@@ -235,39 +235,39 @@ void GestorBibliotecas::opcionAltaCargaSemanal()
 {
     std::cout << "La opción que usted eligió es G)" << std::endl;
     int cantidadDePrestamos;
-    string fechaInicioAltaCarga;
-    string fechaFinAltaCarga;
+
     cout << "Por favor, ingrese la cantidad de prestamos que desea considerar para alta carga: ";
     cin >> cantidadDePrestamos;
-    cout << "Por favor, ingrese la fecha de inicio (YYYYMMDD): ";
-    cin >> fechaInicioAltaCarga;
-    cout << "Por favor, ingrese la fecha de fin (YYYYMMDD): ";
-    cin >> fechaFinAltaCarga;
-    vector<string> bibliotecasConAltaCarga = Prestamo::detectarBibliotecasConAltaCargaSemanal(prestamos, cantidadDePrestamos, fechaInicioAltaCarga, fechaFinAltaCarga);
+
+    vector<string> bibliotecasConAltaCarga = Prestamo::detectarBibliotecasConAltaCargaSemanal(prestamos, cantidadDePrestamos);
     if (bibliotecasConAltaCarga.empty())
-        cout << "No se encontraron bibliotecas con alta carga en el periodo especificado." << endl;
+    {
+        cout << "No se encontraron bibliotecas con alta carga de prestamos." << endl;
+    }
     else
     {
-        cout << "Bibliotecas con alta carga en el periodo " << fechaInicioAltaCarga << " a " << fechaFinAltaCarga << ":" << endl;
+        cout << "Bibliotecas con alta carga de prestamos: " << endl;
         for (const string &codigo : bibliotecasConAltaCarga)
-            cout << "- " << codigo << endl;
+        {
+            cout << codigo << endl;
+        }
     }
 }
 
 void GestorBibliotecas::opcionPrestamosPorISBN()
 {
     std::cout << "La opción que usted eligió es H)" << std::endl;
-    string ISBN;
-    cout << "Por favor, ingrese el ISBN del libro: ";
-    cin >> ISBN;
-    vector<Prestamo> prestamosUsuario = Prestamo::obtenerPrestamosDeUsuarioPorISBN(prestamos, ISBN);
+    string idUsuario;
+    cout << "Por favor, ingrese el DNI del usuario: ";
+    cin >> idUsuario;
+    vector<Prestamo> prestamosUsuario = Prestamo::obtenerPrestamosDeUsuarioPorISBN(prestamos, idUsuario);
     if (prestamosUsuario.empty())
-        cout << "No se encontraron prestamos para el ISBN: " << ISBN << endl;
+        cout << "No se encontraron prestamos para el DNI del usuario: " << idUsuario << endl;
     else
     {
-        cout << "Prestamos encontrados para el ISBN " << ISBN << ":" << endl;
+        cout << "Prestamos encontrados para el usuario con DNI " << idUsuario << ":" << endl;
         for (Prestamo &prestamo : prestamosUsuario)
-            prestamo.mostrar();
+           cout << "ISBN: " << prestamo.getISBN() << endl;
     }
 }
 
