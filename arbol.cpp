@@ -35,13 +35,12 @@ Nodo *Arbol::insertarRecursivo(Nodo *nodo, Biblioteca *biblio)
     return nodo;
 }
 
-// muestra los datos de la biblioteca guardada por el nodo por terminal
 void Arbol::tratar(Nodo *nodo)
 {
     nodo->getBiblioteca()->mostrar();
 }
 
-// muestra las bibliotecas de menor a mayor segun la cantidad de usuarios. O(n)
+// muestra las bibliotecas de menor a mayor segun la cantidad de usuarios. 
 void Arbol::inorden(Nodo *raiz)
 {
     if (raiz != nullptr)
@@ -52,7 +51,7 @@ void Arbol::inorden(Nodo *raiz)
     }
 }
 
-// recorre arbol e inserta en tablaHash los codigos de las bibliotecas guardadas O(n)
+// recorre arbol e inserta en tablaHash los codigos de las bibliotecas guardadas 
 void Arbol::recorreEInsertaEnTabla(Nodo *raiz, TablaHash &tablaH)
 {
     if (raiz != nullptr)
@@ -86,17 +85,15 @@ Nodo *Arbol::encontrarPadre(string codigoBiblioteca, int cantidadUsuarios)
     if (!raiz or raiz->getBiblioteca()->getCodigo() == codigoBiblioteca)
         padre = nullptr;
     else
-    { // si se encuentra al padre o el actual esta vacio para
+    { 
         while (actual != nullptr && padre == nullptr)
         {
-            // si el actual tiene de hijo izquierda a la biblioteca buscada
             if (actual->getHijoIzquierda() &&
                 actual->getHijoIzquierda()->getBiblioteca()->getCantidadUsuarios() == cantidadUsuarios &&
                 actual->getHijoIzquierda()->getBiblioteca()->getCodigo() == codigoBiblioteca)
             {
                 padre = actual;
             }
-            // si el actual tiene de hijo derecha a la biblioteca buscada
             else if (actual->getHijoDerecha() &&
                      actual->getHijoDerecha()->getBiblioteca()->getCantidadUsuarios() == cantidadUsuarios &&
                      actual->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
@@ -104,7 +101,6 @@ Nodo *Arbol::encontrarPadre(string codigoBiblioteca, int cantidadUsuarios)
                 padre = actual;
             }
             else
-            // el actual no es padre, ve si tiene que buscar hacia la derecha o izquierda segun la cantidad de usuarios
             {
                 if (cantidadUsuarios < actual->getBiblioteca()->getCantidadUsuarios())
                     actual = actual->getHijoIzquierda();
@@ -134,7 +130,7 @@ void Arbol::eliminarCaso1(Nodo *padreNodo, string codigoBiblioteca)
         aux = padreNodo->getHijoIzquierda();
         padreNodo->setHijoIzquierda(nullptr);
     }
-    delete aux; // liberamos memoria
+    delete aux; 
 };
 
 // el nodo a eliminar tiene solo un hijo
@@ -148,13 +144,11 @@ void Arbol::eliminarCaso2(Nodo *padreNodo, string codigoBiblioteca)
     {
         aux = raiz;
     }
-    // el nodo a eliminar es el derecho
     else if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
     {
         aux = padreNodo->getHijoDerecha();
         esDerecha = true;
     }
-    // el nodo a eliminar es el izquierdo
     else
     {
         aux = padreNodo->getHijoIzquierda();
@@ -171,27 +165,13 @@ void Arbol::eliminarCaso2(Nodo *padreNodo, string codigoBiblioteca)
         padreNodo->setHijoDerecha(hijoUnico);
     else
         padreNodo->setHijoIzquierda(hijoUnico);
-    delete aux; // liberamos memoria
+    delete aux; 
 };
-
-Nodo *Arbol::padreMayorDeSubarbol(Nodo *nodo)
-{ // sirve para el caso eliminar 3, busca el padre del mayor
-    Nodo *padre = nodo;
-    Nodo *actual = nodo;
-
-    while (actual && actual->getHijoDerecha())
-    {
-        padre = actual;
-        actual = actual->getHijoDerecha();
-    }
-    return padre;
-}
 
 // si el nodo a eliminar tiene dos hijos
 void Arbol::eliminarCaso3(Nodo *padreNodo, string codigoBiblioteca)
 {
     Nodo *nodoAEliminar;
-    // se indica cual es el nodo a eliminar
     if (padreNodo == nullptr)
         nodoAEliminar = raiz;
     else if (padreNodo->getHijoDerecha() && padreNodo->getHijoDerecha()->getBiblioteca()->getCodigo() == codigoBiblioteca)
@@ -211,7 +191,7 @@ void Arbol::eliminarCaso3(Nodo *padreNodo, string codigoBiblioteca)
 
     // ajusta punteros segun si el mayor es hijo directo o no del nodo a eliminar
     if (padreDelMayor == nodoAEliminar)
-        // el mayor es hijo izquierdo directo del nodo a eliminar
+        // el mayor es hijo izquierdo directo del nodo a eliminar, nunca entro en el while
         mayor->setHijoDerecha(nodoAEliminar->getHijoDerecha());
     else
     {
@@ -221,7 +201,7 @@ void Arbol::eliminarCaso3(Nodo *padreNodo, string codigoBiblioteca)
         mayor->setHijoDerecha(nodoAEliminar->getHijoDerecha());
     }
 
-    // uno al padre del nodo original al nuevo nodo
+    // uno al padre del nodo original al nodo mayor
     if (padreNodo == nullptr)
         raiz = mayor; // si eliminamos la raiz
     else if (padreNodo->getHijoIzquierda() == nodoAEliminar)

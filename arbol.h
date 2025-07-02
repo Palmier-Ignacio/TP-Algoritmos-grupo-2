@@ -44,9 +44,6 @@ public:
     // borra el nodo solicitado del arbol y devuelve un bool para indicar si fue borrado
     bool borrar(string codigoBiblioteca, int cantidadUsuarios);
 
-    // pos: devuelve el nodo padre mayor del subarbol
-    Nodo *padreMayorDeSubarbol(Nodo *nodo);
-
     // pos: elimina el nodo solicitado teniendo en cuenta que no tenga hijos
     void eliminarCaso1(Nodo *nodo, string codigoBiblioteca);
 
