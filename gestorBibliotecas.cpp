@@ -66,12 +66,6 @@ void GestorBibliotecas::ejecutar()
             break;
         case 'j':
             seguir = false;
-            arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());
-            tablaBiblioteca.~TablaHash();
-            delete grafo;
-
-            for (Prestamo *prest : prestamos)
-                delete prest;
             break;
         default:
             cout << "Opcion no valida" << endl;
@@ -268,7 +262,7 @@ void GestorBibliotecas::opcionPrestamosPorISBN()
     {
         cout << "Prestamos encontrados para el usuario con DNI " << idUsuario << ":" << endl;
         for (Prestamo &prestamo : prestamosUsuario)
-           cout << "ISBN: " << prestamo.getISBN() << endl;
+            cout << "ISBN: " << prestamo.getISBN() << endl;
     }
 }
 

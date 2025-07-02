@@ -88,7 +88,7 @@ void TablaHash::insertar(string codigoBiblioteca)
     }
     else
     {
-        cout << "No se pudo insertar el código de la biblioteca: tabla llena o sin espacio válido.\n";
+        cout << "No se pudo insertar el codigo de la biblioteca: tabla llena o sin espacio valido.\n";
     }
 }
 
@@ -99,13 +99,13 @@ void TablaHash::eliminar(const string &clave)
 
     if (indiceBiblio != -1)
     {
-        cout << "Se eliminó con éxito de la tabla la biblioteca con código: " << clave << "...\n";
+        cout << "Se elimino con exito de la tabla la biblioteca con codigo: " << clave << "...\n";
         tabla[indiceBiblio].cambiarEstado(BORRADO);
         tabla[indiceBiblio].setValor("");
     }
     else
     {
-        cout << "No se encontró la biblioteca en la tabla.\n";
+        cout << "No se encontro la biblioteca en la tabla.\n";
     }
 }
 
@@ -130,7 +130,7 @@ void TablaHash::mostrarBibliotecas()
     cout << "Valores en Tabla:\n";
     for (int i = 0; i < tamanio; i++)
     {
-        cout << "Posición " << i << ": " << tabla[i].getValor() << " (Estado: ";
+        cout << "Posicion " << i << ": " << tabla[i].getValor() << " (Estado: ";
         switch (tabla[i].getEstado())
         {
             case VACIO: cout << "VACIO"; break;
