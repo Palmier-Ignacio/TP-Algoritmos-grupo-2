@@ -1,4 +1,5 @@
 #include "prestamo.h"
+#include <ctime>
 #include <fstream>
 #include <sstream>
 

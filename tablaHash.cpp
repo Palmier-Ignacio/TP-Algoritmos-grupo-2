@@ -4,31 +4,40 @@
 #include <iostream>
 #include <string>
 using namespace std;
+
+// Constructor de la clase TablaHash
+// Inicializa la tabla con el tamaño especificado y reserva memoria para las celdas
 TablaHash::TablaHash(int tamanio)
 {
     this->tamanio = tamanio;
     tabla = new Celda[tamanio];
 }
+
+// Función hash simple que calcula el índice a partir de la suma de los caracteres del string
 int TablaHash::funcionHash(const string &codigo)
 {
     int hash = 0;
     for (char c : codigo)
-        hash += c;
-    return hash % getTamanio();
+        hash += c; // Suma los valores ASCII de los caracteres
+    return hash % getTamanio(); // Devuelve el índice dentro del rango
 }
 
+// Destructor: libera la memoria reservada para la tabla
 TablaHash::~TablaHash()
 {
-     delete[] tabla;
+    delete[] tabla;
 }
 
+// Devuelve el tamaño de la tabla
 int TablaHash::getTamanio() { return tamanio; }
- 
+
+// Busca un índice adecuado para insertar una nueva clave, considerando colisiones
 int TablaHash::buscarIndiceParaInsertar(const string &clave) 
 {
     int indice = funcionHash(clave);
     int intentos = 0;
 
+    // Busca una posición libre o con la misma clave (para evitar duplicados)
     while (intentos < tamanio)
     {
         Estado estado = tabla[indice].getEstado();
@@ -36,12 +45,15 @@ int TablaHash::buscarIndiceParaInsertar(const string &clave)
         if (estado != EN_USO || tabla[indice].getValor() == clave)
             return indice;
 
+        // Prueba la siguiente posición (resolución por sondeo lineal)
         indice = (indice + 1) % tamanio;
         intentos++;
     }
-    return -1; // No se encontró un lugar válido
+
+    return -1; // Tabla llena o sin espacio válido
 }
 
+// Busca el índice de una clave existente, o devuelve -1 si no está
 int TablaHash::buscarIndiceDeClave(const string &clave) 
 {
     int indice = funcionHash(clave);
@@ -52,7 +64,7 @@ int TablaHash::buscarIndiceDeClave(const string &clave)
         Estado estado = tabla[indice].getEstado();
 
         if (estado == VACIO)
-            return -1; // No está la clave, y no va a aparecer más adelante
+            return -1; // Si está vacío, no hay posibilidad de que esté más adelante
 
         if (estado == EN_USO && tabla[indice].getValor() == clave)
             return indice;
@@ -60,10 +72,11 @@ int TablaHash::buscarIndiceDeClave(const string &clave)
         indice = (indice + 1) % tamanio;
         intentos++;
     }
+
     return -1; // No se encontró la clave
 }
 
-
+// Inserta un nuevo código de biblioteca en la tabla hash
 void TablaHash::insertar(string codigoBiblioteca)
 {
     int indice = buscarIndiceParaInsertar(codigoBiblioteca);
@@ -79,21 +92,24 @@ void TablaHash::insertar(string codigoBiblioteca)
     }
 }
 
-void TablaHash::eliminar(const string &clave){
+// Elimina una biblioteca cambiando su estado a BORRADO y limpiando su valor
+void TablaHash::eliminar(const string &clave)
+{
     int indiceBiblio = buscarIndiceDeClave(clave);
 
     if (indiceBiblio != -1)
     {
-        cout << "Eliminando a biblioteca " << indiceBiblio << "..." << endl;
+        cout << "Se eliminó con éxito de la tabla la biblioteca con código: " << clave << "...\n";
         tabla[indiceBiblio].cambiarEstado(BORRADO);
         tabla[indiceBiblio].setValor("");
     }
     else
     {
-        cout << "No se pudo encontrar el código de la biblioteca";
+        cout << "No se encontró la biblioteca en la tabla.\n";
     }
 }
 
+// Busca una biblioteca por su código y muestra el resultado
 void TablaHash::buscarBiblioteca(string codigoBiblioteca)
 {
     int indice = buscarIndiceDeClave(codigoBiblioteca);
@@ -108,11 +124,15 @@ void TablaHash::buscarBiblioteca(string codigoBiblioteca)
     }
 }
 
-void TablaHash::mostrarBibliotecas(){
+// Muestra el contenido de la tabla hash con sus estados (VACIO, EN_USO, BORRADO)
+void TablaHash::mostrarBibliotecas()
+{
     cout << "Valores en Tabla:\n";
-    for(int i = 0; i < tamanio; i++){
+    for (int i = 0; i < tamanio; i++)
+    {
         cout << "Posición " << i << ": " << tabla[i].getValor() << " (Estado: ";
-        switch(tabla[i].getEstado()) {
+        switch (tabla[i].getEstado())
+        {
             case VACIO: cout << "VACIO"; break;
             case EN_USO: cout << "EN_USO"; break;
             case BORRADO: cout << "BORRADO"; break;

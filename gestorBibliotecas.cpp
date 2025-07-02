@@ -67,13 +67,14 @@ void GestorBibliotecas::ejecutar()
         case 'j':
             seguir = false;
             arbolBibliotecas.liberar(arbolBibliotecas.getRaiz());
+            tablaBiblioteca.~TablaHash();
             delete grafo;
 
             for (Prestamo *prest : prestamos)
                 delete prest;
             break;
         default:
-            cout << "Opción no válida" << endl;
+            cout << "Opcion no valida" << endl;
         }
         Sleep(3000);
     } while (seguir);
@@ -82,7 +83,7 @@ void GestorBibliotecas::ejecutar()
 void GestorBibliotecas::mostrarMenu()
 {
     cout << endl
-         << "Ingrese una opción: \n"
+         << "Ingrese una opcion: \n"
          << "A) Cargar biblioteca\n"
          << "B) Buscar biblioteca\n"
          << "C) Eliminar biblioteca\n"
@@ -93,12 +94,12 @@ void GestorBibliotecas::mostrarMenu()
          << "H) Prestamos por ISBN\n"
          << "I) Mostrar tabla hash\n"
          << "J) Salir\n"
-         << "Opción: ";
+         << "Opcion: ";
 }
 
 void GestorBibliotecas::opcionCargarBiblioteca()
 {
-    cout << "La opción que usted eligió es A)" << endl;
+    cout << "La opcion que usted eligio es A)" << endl;
     string codigo;
     string nombre;
     string ciudad;
@@ -133,7 +134,7 @@ void GestorBibliotecas::opcionCargarBiblioteca()
 
 void GestorBibliotecas::opcionBuscarBiblioteca()
 {
-    std::cout << "La opción que usted eligió es B)" << std::endl;
+    std::cout << "La opcion que usted eligio es B)" << std::endl;
     string codigoBibliotecaABuscar;
     int cantUsuariosBiblioteca;
     cout << "Por favor, ingrese el codigo de la biblioteca que desea buscar: ";
@@ -146,7 +147,7 @@ void GestorBibliotecas::opcionBuscarBiblioteca()
 
 void GestorBibliotecas::opcionEliminarBiblioteca()
 {
-    std::cout << "La opción que usted eligió es C)" << std::endl;
+    std::cout << "La opcion que usted eligio es C)" << std::endl;
     string codigoBibliotecaABorrar;
     int cantUsuariosBiblioteca;
     cout << "Por favor, ingrese el codigo de la biblioteca que desea eliminar: ";
@@ -160,7 +161,7 @@ void GestorBibliotecas::opcionEliminarBiblioteca()
 
 void GestorBibliotecas::opcionMostrarBibliotecas()
 {
-    std::cout << "La opción que usted eligió es D)" << std::endl;
+    std::cout << "La opcion que usted eligio es D)" << std::endl;
     arbolBibliotecas.inorden(arbolBibliotecas.getRaiz());
 }
 
@@ -190,11 +191,11 @@ void GestorBibliotecas::opcionCalcularDistancia()
         cout << "No hay camino entre las bibliotecas." << endl;
         return;
     }
-    cout << "Distancia mínima: " << distancia << endl;
+    cout << "Distancia minima: " << distancia << endl;
 
     // Obtener camino mínimo
     vector<string> camino = grafo->obtenerCaminoMinimo(idxOrigen, idxDestino);
-    cout << "Camino mínimo: ";
+    cout << "Camino minimo: ";
     for (const auto &biblio : camino)
     {
         cout << biblio;
@@ -206,7 +207,7 @@ void GestorBibliotecas::opcionCalcularDistancia()
 
 void GestorBibliotecas::opcionTotalPrestamosPeriodo()
 {
-    std::cout << "La opción que usted eligió es F)" << std::endl;
+    std::cout << "La opcion que usted eligio es F)" << std::endl;
     string codigoBiblioteca;
     string fechaInicio;
     string fechaFin;
@@ -233,7 +234,7 @@ void GestorBibliotecas::opcionTotalPrestamosPeriodo()
 
 void GestorBibliotecas::opcionAltaCargaSemanal()
 {
-    std::cout << "La opción que usted eligió es G)" << std::endl;
+    std::cout << "La opcion que usted eligio es G)" << std::endl;
     int cantidadDePrestamos;
 
     cout << "Por favor, ingrese la cantidad de prestamos que desea considerar para alta carga: ";
@@ -256,7 +257,7 @@ void GestorBibliotecas::opcionAltaCargaSemanal()
 
 void GestorBibliotecas::opcionPrestamosPorISBN()
 {
-    std::cout << "La opción que usted eligió es H)" << std::endl;
+    std::cout << "La opcion que usted eligio es H)" << std::endl;
     string idUsuario;
     cout << "Por favor, ingrese el DNI del usuario: ";
     cin >> idUsuario;
@@ -273,6 +274,6 @@ void GestorBibliotecas::opcionPrestamosPorISBN()
 
 void GestorBibliotecas::opcionMostrarTablaHash()
 {
-    std::cout << "La opción que usted eligió es I)" << std::endl;
+    std::cout << "La opcion que usted eligio es I)" << std::endl;
     tablaBiblioteca.mostrarBibliotecas();
 }
